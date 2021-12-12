@@ -1,0 +1,49 @@
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Klient',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=80, verbose_name='ФИО клиента')),
+            ],
+            options={
+                'verbose_name': 'Клиента',
+                'verbose_name_plural': 'Клиент',
+                'ordering': ['name'],
+            },
+        ),
+        migrations.CreateModel(
+            name='Master',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=80, verbose_name='ФИО мастера')),
+            ],
+            options={
+                'verbose_name': 'Мастера',
+                'verbose_name_plural': 'Мастер',
+                'ordering': ['name'],
+            },
+        ),
+        migrations.CreateModel(
+            name='Uslygi',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('inf', djongo.models.fields.EmbeddedField(model_container=bboard.models.Yslug)),
+                ('data_priema', models.DateField(verbose_name='Дата приема заказа')),
+                ('date_vip', models.DateField(verbose_name='Дата выполнения заказа')),
+                ('fio_clienta', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='bboard.klient', verbose_name='ФИО клиента')),
+                ('fio_master', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='bboard.master', verbose_name='ФИО мастера')),
+            ],
+            options={
+                'verbose_name': 'Услугу',
+                'verbose_name_plural': 'Услуга',
+                'ordering': ['data_priema'],
+            },
+        ),
+    ]
