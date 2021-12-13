@@ -1,0 +1,34 @@
+#from django.http import HttpResponse
+#from django.core.cache import cache
+#from django.conf import settings
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
+from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from .models import Uslygi  
+
+@api_view(['GET'])
+def view_uslyg(request):
+    uslyg = Uslygi.objects.all()
+    results = [usl.to_json() for usl in uslyg]
+    return Response(results, status=status.HTTP_201_CREATED)
+
+
+def view_cached_uslyg(request):
+    if 'usl' in cache:
+        uslyg = cache.get('usl')                         
+        #return HttpResponse('ФИО клиента:  ' + uslyg[0]['fio_klienta']+ ';' + '\n' + 'ФИО клиента:  ' + uslyg[0]['fio_mastera'] + ';')
+        return Response(results, status=status.HTTP_201_CREATED)
+    else:
+        uslyg = Uslygi.objects.all()
+        results = [usl.to_json() for usl in uslyg]
+        cache.set('usl', results, timeout=CACHE_TTL)
+        #return HttpResponse(results)
+        return Response(results, status=status.HTTP_201_CREATED)
+
+
+
